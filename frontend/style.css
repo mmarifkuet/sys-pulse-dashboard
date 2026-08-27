@@ -5,8 +5,51 @@ body {
     display: flex;
     justify-content: center;
     padding: 2rem;
+    margin: 0;
 }
-.dashboard { width: 100%; max-width: 800px; }
-.card-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 1rem; margin-top: 1rem; }
-.card { background: #1e293b; padding: 1.5rem; border-radius: 8px; text-align: center; }
-.card p { font-size: 1.8rem; font-weight: bold; color: #38bdf8; margin-top: 0.5rem; }
+
+.dashboard {
+    width: 100%;
+    max-width: 900px;
+}
+
+h1 {
+    text-align: center;
+    color: #f8fafc;
+    margin-bottom: 2rem;
+}
+
+.card-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 1rem;
+    margin-bottom: 2rem;
+}
+
+.card {
+    background: #1e293b;
+    padding: 1.5rem;
+    border-radius: 8px;
+    text-align: center;
+    border: 1px solid #334155;
+}
+
+.card h3 {
+    margin: 0;
+    font-size: 1rem;
+    color: #94a3b8;
+}
+
+.card p {
+    font-size: 1.8rem;
+    font-weight: bold;
+    color: #38bdf8;
+    margin: 0.5rem 0 0 0;
+}
+
+.chart-container {
+    background: #1e293b;
+    padding: 1.5rem;
+    border-radius: 8px;
+    border: 1px solid #334155;
+}
