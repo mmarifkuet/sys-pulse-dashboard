@@ -13,7 +13,8 @@ const metricsChart = new Chart(ctx, {
                 backgroundColor: 'rgba(56, 189, 248, 0.2)',
                 borderWidth: 2,
                 tension: 0.3,
-                fill: true
+                fill: true,
+                yAxisID: 'y'
             },
             {
                 label: 'System Temp (°C)',
@@ -22,7 +23,8 @@ const metricsChart = new Chart(ctx, {
                 backgroundColor: 'rgba(244, 63, 94, 0.2)',
                 borderWidth: 2,
                 tension: 0.3,
-                fill: true
+                fill: true,
+                yAxisID: 'y'
             },
             {
                 label: 'RAM Usage (GB)',
@@ -31,7 +33,8 @@ const metricsChart = new Chart(ctx, {
                 backgroundColor: 'rgba(168, 85, 247, 0.2)',
                 borderWidth: 2,
                 tension: 0.3,
-                fill: true
+                fill: true,
+                yAxisID: 'y1'
             }
         ]
     },
@@ -44,10 +47,22 @@ const metricsChart = new Chart(ctx, {
                 ticks: { color: '#94a3b8' }
             },
             y: {
+                type: 'linear',
+                display: true,
+                position: 'left',
                 min: 0,
                 max: 100,
                 grid: { color: '#334155' },
-                ticks: { color: '#94a3b8' }
+                ticks: { color: '#94a3b8' },
+                title: { display: true, text: '% / °C', color: '#94a3b8' }
+            },
+            y1: {
+                type: 'linear',
+                display: true,
+                position: 'right',
+                grid: { drawOnChartArea: false },
+                ticks: { color: '#a855f7' },
+                title: { display: true, text: 'RAM (GB)', color: '#a855f7' }
             }
         },
         plugins: {
@@ -68,7 +83,6 @@ async function fetchMetrics() {
         document.getElementById('ram-val').innerText = `${data.ram_usage} MB`;
         document.getElementById('temp-val').innerText = `${data.temperature} °C`;
 
-        // Highlight CPU card in red if usage exceeds 80%
         if (data.cpu_load > 80) {
             cpuCard.style.color = '#ef4444';
         } else {
