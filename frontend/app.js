@@ -1,7 +1,5 @@
-// Maximum number of data points visible on the graph
 const MAX_DATA_POINTS = 15;
 
-// Initialize Chart.js Line Chart
 const ctx = document.getElementById('metricsChart').getContext('2d');
 const metricsChart = new Chart(ctx, {
     type: 'line',
@@ -22,6 +20,15 @@ const metricsChart = new Chart(ctx, {
                 data: [],
                 borderColor: '#f43f5e',
                 backgroundColor: 'rgba(244, 63, 94, 0.2)',
+                borderWidth: 2,
+                tension: 0.3,
+                fill: true
+            },
+            {
+                label: 'RAM Usage (GB)',
+                data: [],
+                borderColor: '#a855f7',
+                backgroundColor: 'rgba(168, 85, 247, 0.2)',
                 borderWidth: 2,
                 tension: 0.3,
                 fill: true
@@ -51,30 +58,36 @@ const metricsChart = new Chart(ctx, {
     }
 });
 
-// Fetch metrics from Flask API and update the chart
 async function fetchMetrics() {
     try {
         const res = await fetch('/api/metrics');
         const data = await res.json();
         
-        // Update Card UI
-        document.getElementById('cpu-val').innerText = `${data.cpu_load} %`;
+        const cpuCard = document.getElementById('cpu-val');
+        cpuCard.innerText = `${data.cpu_load} %`;
         document.getElementById('ram-val').innerText = `${data.ram_usage} MB`;
         document.getElementById('temp-val').innerText = `${data.temperature} °C`;
 
-        // Timestamp for X-axis
-        const timeLabel = new Date().toLocaleTimeString();
+        // Highlight CPU card in red if usage exceeds 80%
+        if (data.cpu_load > 80) {
+            cpuCard.style.color = '#ef4444';
+        } else {
+            cpuCard.style.color = '#38bdf8';
+        }
 
-        // Push new data into Chart
+        const timeLabel = new Date().toLocaleTimeString();
+        const ramInGB = (data.ram_usage / 1024).toFixed(2);
+
         metricsChart.data.labels.push(timeLabel);
         metricsChart.data.datasets[0].data.push(data.cpu_load);
         metricsChart.data.datasets[1].data.push(data.temperature);
+        metricsChart.data.datasets[2].data.push(ramInGB);
 
-        // Keep rolling window of MAX_DATA_POINTS
         if (metricsChart.data.labels.length > MAX_DATA_POINTS) {
             metricsChart.data.labels.shift();
             metricsChart.data.datasets[0].data.shift();
             metricsChart.data.datasets[1].data.shift();
+            metricsChart.data.datasets[2].data.shift();
         }
 
         metricsChart.update();
@@ -83,6 +96,5 @@ async function fetchMetrics() {
     }
 }
 
-// Poll backend every 1 second
 setInterval(fetchMetrics, 1000);
 fetchMetrics();
